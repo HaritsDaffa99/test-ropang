@@ -58,7 +58,9 @@ const Menu = async () => {
       <Link
         href="/admin/menu/addMenu"
         className="flex flex-col max-w-sm p-6 items-center"
-      ><button className="btn">Add New</button></Link>
+      >
+        <button className="btn">Add New</button>
+      </Link>
     </div>
   );
 };
