@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userID       Int    @id @default(autoincrement())
+  userName     String @db.Text
+  userEmail    String @unique @db.Text
+  userPassword String @db.Text
+  userPNumber  String @db.Text
+
+  role UserRole @default(USER)
+
+  UserOrder UserOrder[]
+}
+
+model Menu {
+  menuID          Int         @id @default(autoincrement())
+  menuName        String      @db.Text
+  menuPrice       Int         @db.Integer
+  menuDescription String?     @db.Text
+  UserOrder       UserOrder[]
+}
+
+model Table {
+  tableID       Int        @id @default(autoincrement())
+  tableSize     Int        @db.Integer
+  tableQuantity Int        @db.Integer
+  UserOrder     UserOrder?
+}
+
+model Payment {
+  paymentID     Int        @id @default(autoincrement())
+  paymentValue  Int        @db.Integer
+  paymentStatus status     @default(COMPLETED)
+  UserOrder     UserOrder?
+}
+
+model UserOrder {
+  user                 User     @relation(fields: [uID], references: [userID])
+  menu                 Menu     @relation(fields: [mID], references: [menuID])
+  table                Table    @relation(fields: [tID], references: [tableID])
+  payment              Payment  @relation(fields: [pID], references: [paymentID])
+  oID                  Int      @id @default(autoincrement())
+  uID                  Int      @unique
+  mID                  Int
+  tID                  Int      @unique
+  pID                  Int      @unique
+  menuQuantity         Int      @db.Integer
+  orderPax             Int      @db.Integer
+  orderPrice           Int      @db.Integer
+  orderDineInStatus    status   @default(IN_PROGRESS)
+  orderDate            DateTime @db.Date
+  orderTime            DateTime @db.Time
+  orderNotes           String?  @db.Text
+  orderCreateOrderDate DateTime @default(now()) @db.Date
+  orderSystemStatus    status   @default(IN_PROGRESS)
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum status {
+  COMPLETED
+  CANCELLED
+  IN_PROGRESS
+}
