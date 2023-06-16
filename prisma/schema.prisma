@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  userID       Int    @id @default(autoincrement())
-  userName     String @db.Text
-  userEmail    String @unique @db.Text
-  userPassword String @db.Text
-  userPNumber  String @db.Text
+  id       Int    @id @default(autoincrement())
+  name     String @db.Text
+  email    String @unique @db.Text
+  password String @db.Text
+  phone    String @db.Text
 
   role UserRole @default(USER)
 
@@ -23,33 +23,38 @@ model User {
 }
 
 model Menu {
-  menuID          Int         @id @default(autoincrement())
-  menuName        String      @db.Text
-  menuPrice       Int         @db.Integer
-  menuDescription String?     @db.Text
-  UserOrder       UserOrder[]
+  id          Int      @id @default(autoincrement())
+  type        String   @db.Text 
+  name        String   @db.Text
+  price       Int      @db.Integer
+  calorie     Int      @db.Integer
+  fat         Int      @db.Integer
+  ingredient  String[]
+  description String?  @db.Text
+
+  UserOrder UserOrder[]
 }
 
 model Table {
-  tableID       Int        @id @default(autoincrement())
-  tableSize     Int        @db.Integer
-  tableQuantity Int        @db.Integer
-  UserOrder     UserOrder?
+  id        Int        @id @default(autoincrement())
+  size      Int        @db.Integer
+  qty       Int        @db.Integer
+  UserOrder UserOrder?
 }
 
 model Payment {
-  paymentID     Int        @id @default(autoincrement())
-  paymentValue  Int        @db.Integer
-  paymentStatus status     @default(COMPLETED)
-  UserOrder     UserOrder?
+  id        Int        @id @default(autoincrement())
+  value     Int        @db.Integer
+  status    status     @default(COMPLETED)
+  UserOrder UserOrder?
 }
 
 model UserOrder {
-  user                 User     @relation(fields: [uID], references: [userID])
-  menu                 Menu     @relation(fields: [mID], references: [menuID])
-  table                Table    @relation(fields: [tID], references: [tableID])
-  payment              Payment  @relation(fields: [pID], references: [paymentID])
-  oID                  Int      @id @default(autoincrement())
+  user                 User     @relation(fields: [uID], references: [id])
+  menu                 Menu     @relation(fields: [mID], references: [id])
+  table                Table    @relation(fields: [tID], references: [id])
+  payment              Payment  @relation(fields: [pID], references: [id])
+  id                 Int      @id @default(autoincrement())
   uID                  Int      @unique
   mID                  Int
   tID                  Int      @unique
