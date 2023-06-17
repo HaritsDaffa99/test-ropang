@@ -1,5 +1,6 @@
 import { prisma } from "../../../db";
 import Link from "next/link";
+import { TodoItem } from "@/components/create";
 
 const getMenu = async () => {
   const res = await prisma.menu.findMany({
@@ -16,6 +17,18 @@ const getMenu = async () => {
   });
   return res;
 };
+
+export async function addOrder(id: number) {
+  "use server";
+
+  await prisma.userOrderTest.create({ data: { menuQuantity: 1, mID: id } });
+}
+
+// export async function deleteOrder(id: number) {
+//   "use server";
+
+//   await prisma.todo.update({ where: { id }, data: { complete } });
+// }
 
 const Menu = async () => {
   const menu = await getMenu();
@@ -47,13 +60,10 @@ const Menu = async () => {
               <td>{menu.fat}</td>
               <td>{menu.ingredient.length}</td>
               <td>{menu.description}</td>
-              <Link
-                href="/admin/menu/addMenu"
-                className="flex flex-col max-w-sm p-6 items-center"
-              >
-                <button className="btn">Add to Cart</button>
-              </Link>
+              <td className="flex justify-center space-x-1">
+                <TodoItem key={menu.id} {...menu} addOrder={addOrder} />
 
+              </td>
               <td className="flex justify-center space-x-1">
                 {/* <UpdateProduct brands={brands} product={product} />
                     <DeleteProduct product={product} /> */}
@@ -62,12 +72,6 @@ const Menu = async () => {
           ))}
         </tbody>
       </table>
-      <Link
-        href="/admin/menu/addMenu"
-        className="flex flex-col max-w-sm p-6 items-center"
-      >
-        <button className="btn">Add New</button>
-      </Link>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "../db";
+import { OrderItem } from "@/components/delete";
 
 const getOrder = async () => {
   const res = await prisma.userOrderTest.findMany({
@@ -13,6 +14,14 @@ const getOrder = async () => {
   return res;
 };
 
+export async function deleteOrder(id: number) {
+  "use server";
+
+  await prisma.userOrderTest.delete({ where: {
+    id,
+  }, });
+}
+
 const Menu = async () => {
   const order = await getOrder();
 
@@ -23,8 +32,7 @@ const Menu = async () => {
           <tr>
             <th>#</th>
             <th>Menu name</th>
-            <th>Type</th>
-            <th>Price</th>
+            <th>Quantity</th>
 
             <th className="text-center">Actions</th>
           </tr>
@@ -35,7 +43,7 @@ const Menu = async () => {
               <td>{index + 1}</td>
               <td>{order.menu.name}</td>
               <td>{order.menuQuantity}</td>
-
+              <td className="flex justify-center space-x-1"><OrderItem key={order.id} {...order} deleteOrder={deleteOrder}/></td>
               <td className="flex justify-center space-x-1">
                 {/* <UpdateProduct brands={brands} product={product} />
                       <DeleteProduct product={product} /> */}
@@ -44,12 +52,6 @@ const Menu = async () => {
           ))}
         </tbody>
       </table>
-      <Link
-        href="/admin/menu/addMenu"
-        className="flex flex-col max-w-sm p-6 items-center"
-      >
-        <button className="btn">Add New</button>
-      </Link>
     </div>
   );
 };
