@@ -47,6 +47,13 @@ const Menu = async () => {
               <td>{menu.fat}</td>
               <td>{menu.ingredient.length}</td>
               <td>{menu.description}</td>
+              <Link
+                href="/admin/menu/addMenu"
+                className="flex flex-col max-w-sm p-6 items-center"
+              >
+                <button className="btn">Add to Cart</button>
+              </Link>
+
               <td className="flex justify-center space-x-1">
                 {/* <UpdateProduct brands={brands} product={product} />
                     <DeleteProduct product={product} /> */}
@@ -58,7 +65,9 @@ const Menu = async () => {
       <Link
         href="/admin/menu/addMenu"
         className="flex flex-col max-w-sm p-6 items-center"
-      ><button className="btn">Add New</button></Link>
+      >
+        <button className="btn">Add New</button>
+      </Link>
     </div>
   );
 };

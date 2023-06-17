@@ -24,7 +24,7 @@ model User {
 
 model Menu {
   id          Int      @id @default(autoincrement())
-  type        String   @db.Text 
+  type        String   @db.Text
   name        String   @db.Text
   price       Int      @db.Integer
   calorie     Int      @db.Integer
@@ -32,7 +32,8 @@ model Menu {
   ingredient  String[]
   description String?  @db.Text
 
-  UserOrder UserOrder[]
+  UserOrder     UserOrder[]
+  UserOrderTest UserOrderTest[]
 }
 
 model Table {
@@ -54,7 +55,7 @@ model UserOrder {
   menu                 Menu     @relation(fields: [mID], references: [id])
   table                Table    @relation(fields: [tID], references: [id])
   payment              Payment  @relation(fields: [pID], references: [id])
-  id                 Int      @id @default(autoincrement())
+  id                   Int      @id @default(autoincrement())
   uID                  Int      @unique
   mID                  Int
   tID                  Int      @unique
@@ -79,4 +80,11 @@ enum status {
   COMPLETED
   CANCELLED
   IN_PROGRESS
+}
+
+model UserOrderTest {
+  menu         Menu @relation(fields: [mID], references: [id])
+  id           Int  @id @default(autoincrement())
+  menuQuantity Int  @db.Integer
+  mID          Int
 }
